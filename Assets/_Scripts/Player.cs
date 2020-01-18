@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     private Vector2 _velocity = Vector2.zero;
 
     private float _shootCountdown = 0f;
+    private float _hitCountdown = 0f;
     
     private Rigidbody2D _rigidbody;
     private Camera _mainCam;
@@ -22,6 +23,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float speedLimit;
     [SerializeField] private float slowdownCoefficient;
 
+    [SerializeField] private float initialHitCountdown;
+    
     [SerializeField] private Transform gun;
     [SerializeField] private Transform bulletSpawnPosition;
 
@@ -59,7 +62,7 @@ public class Player : MonoBehaviour
                 : -Input.GetAxisRaw("Vertical Gamepad")
         );
         GameManager.Instance.movementAxis = GameManager.Instance.movementAxis.normalized;
-
+        Debug.Log(_hitCountdown);
         
         // Determine aimAxis
         if (GameManager.Instance.inputType == InputType.KeyboardMouse)
@@ -81,6 +84,7 @@ public class Player : MonoBehaviour
         Vector2 realAimAxis = new Vector2(Input.GetAxisRaw("Horizontal Shooting Gamepad"), Input.GetAxisRaw("Vertical Shooting Gamepad"));
 
         _shootCountdown -= Time.deltaTime;
+        _hitCountdown -= Time.deltaTime;
         
         bool shooting = GameManager.Instance.inputType == InputType.KeyboardMouse
             ? Input.GetMouseButton(0)
@@ -98,18 +102,26 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnCollisionStay2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Enemy"))
             Hit(other.gameObject.GetComponent<Enemy>().strength);
     }
 
-    public void Hit(float enemyStrength)
+    private void Hit(float enemyStrength)
     {
-        health -= enemyStrength;
-        if (health <= 0.1)
+        if (_hitCountdown <= 0.1)
         {
-            SceneManager.LoadScene("Scenes/GameOver");
+            _hitCountdown = initialHitCountdown;
+            health -= enemyStrength;
+            if (health <= 0.1)
+            {
+                SceneManager.LoadScene("Scenes/GameOver");
+            }
+        }
+        else
+        {
+            Debug.Log("countdown");
         }
     }
 }
