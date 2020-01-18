@@ -18,6 +18,10 @@ public class GameManager : MonoBehaviour
 
     public float bulletSpeed;
 
+    [Header("States")] 
+    
+    public bool usingGlobalBulletDirection = false;
+    
     [Header("References")] 
     
     public CompositeCollider2D mapCollider;

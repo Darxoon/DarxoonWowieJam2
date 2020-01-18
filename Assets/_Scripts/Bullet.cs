@@ -28,7 +28,10 @@ public class Bullet : MonoBehaviour
 
     private void Update()
     {
-        _rigidbody.velocity = _aimAxis * GameManager.Instance.bulletSpeed;
+        if(GameManager.Instance.usingGlobalBulletDirection && Input.GetMouseButton(0) || !GameManager.Instance.usingGlobalBulletDirection)
+            _rigidbody.velocity = (GameManager.Instance.usingGlobalBulletDirection ? GameManager.Instance.aimAxis : _aimAxis) * GameManager.Instance.bulletSpeed;
+        else if(GameManager.Instance.usingGlobalBulletDirection)
+            _rigidbody.velocity = Vector2.zero;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
