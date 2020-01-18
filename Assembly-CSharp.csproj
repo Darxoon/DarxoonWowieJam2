@@ -56,11 +56,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\_Scripts\Bullet.cs" />
+     <Compile Include="Assets\_Scripts\Enemy.cs" />
      <Compile Include="Assets\_Scripts\GameManager.cs" />
      <Compile Include="Assets\_Scripts\InputType.cs" />
      <Compile Include="Assets\_Scripts\Player.cs" />
-     <Compile Include="Assets\Bullet.cs" />
-     <Compile Include="Assets\Enemy.cs" />
+     <Compile Include="Assets\CameraController.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>D:/Programming/UnityProjects/DarxoonWowie2/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
