@@ -1,8 +1,14 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
+    public static Player Instance;
+
+    public float health = 5f;
+    public float strength = 1f;
+    
     private Vector2 _velocity = Vector2.zero;
 
     private float _shootCountdown = 0f;
@@ -18,7 +24,12 @@ public class Player : MonoBehaviour
 
     [SerializeField] private Transform gun;
     [SerializeField] private Transform bulletSpawnPosition;
-    
+
+    private void Awake() 
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -77,13 +88,28 @@ public class Player : MonoBehaviour
         if (shooting && _shootCountdown <= 0f)
         {
             _shootCountdown = initialShootCountdown;
-            GameObject instance = GameManager.Instance.bulletQueue.Dequeue();
-            GameManager.Instance.bulletQueue.Enqueue(instance);
+            GameObject instance = LevelManager.Instance.bulletQueue.Dequeue();
+            LevelManager.Instance.bulletQueue.Enqueue(instance);
             instance.SetActive(false);
             instance.SetActive(true);
             instance.transform.position = bulletSpawnPosition.position;
             Vector3 originalInstanceRotation = Quaternion.LookRotation(GameManager.Instance.aimAxis, Vector3.up).eulerAngles;
             instance.transform.rotation = Quaternion.Euler(originalRotation.x, originalInstanceRotation.y > 0 ? originalInstanceRotation.y : -90, 0);//Quaternion.Euler(0, -90, 0);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+            Hit(other.gameObject.GetComponent<Enemy>().strength);
+    }
+
+    public void Hit(float enemyStrength)
+    {
+        health -= enemyStrength;
+        if (health <= 0.1)
+        {
+            SceneManager.LoadScene("Scenes/GameOver");
         }
     }
 }

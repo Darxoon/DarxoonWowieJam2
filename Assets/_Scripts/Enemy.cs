@@ -3,37 +3,27 @@
 public class Enemy : MonoBehaviour
 {
 
-    [SerializeField] private float health = 5;
+    public float health = 5;
+    public float strength = 1;
     
-
     [Header("Calculations")]
     
     [SerializeField] private float turnSpeed;
     [SerializeField] private float speed;
     [SerializeField] private float direction;
 
-    [SerializeField] private float explosionStrength;
-    
-    [Header("References")]
-    
-    [SerializeField] private Player player;
-    [SerializeField] private CircleCollider2D killCollider;
-
     [Header("Components")] 
     
     [SerializeField] private new Rigidbody2D rigidbody;
 
-    private Collider2D[] contacts = new Collider2D[50];
-    
     private void Start()
     {
-        player = FindObjectOfType<Player>();
         rigidbody = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
     {
-        Vector2 unitVelocity = (player.transform.position - transform.position).normalized;
+        Vector2 unitVelocity = (Player.Instance.transform.position - transform.position).normalized;
         Quaternion tempDirection = Quaternion.LookRotation(unitVelocity.x > 0 ? -unitVelocity : unitVelocity, Vector3.up);
         float rawDirection = tempDirection.eulerAngles.x + (unitVelocity.x > 0 ? 180f : 0f);
         direction = Mathf.LerpAngle(direction, rawDirection, turnSpeed);

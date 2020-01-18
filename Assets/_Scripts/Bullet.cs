@@ -13,16 +13,19 @@ public class Bullet : MonoBehaviour
     private Rigidbody2D _rigidbody;
 
     private Collider2D[] _contacts = new Collider2D[20];
+
+    private float _strength = 0;
     
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _collider = transform.GetChild(0).gameObject.GetComponent<BoxCollider2D>();
-        _mapCollider = GameManager.Instance.mapCollider;
+        _mapCollider = LevelManager.Instance.mapCollider;
     }
 
     private void OnEnable()
     {
+        _strength = Player.Instance.strength;
         _aimAxis = GameManager.Instance.aimAxis;
     }
 
@@ -40,7 +43,7 @@ public class Bullet : MonoBehaviour
             gameObject.SetActive(false);
         if (other.gameObject.CompareTag("Enemy"))
         {
-            other.gameObject.GetComponent<Enemy>().Hit(1);
+            other.gameObject.GetComponent<Enemy>().Hit(_strength);
                 
             gameObject.SetActive(false);
         }
