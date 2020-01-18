@@ -31,9 +31,11 @@ public class Bullet : MonoBehaviour
 
     private void Update()
     {
-        if(GameManager.Instance.usingGlobalBulletDirection && Input.GetMouseButton(0) || !GameManager.Instance.usingGlobalBulletDirection)
+        if (GameManager.Instance.usingGlobalBulletDirection && GameManager.Instance.inputType == InputType.KeyboardMouse && Input.GetMouseButton(0)
+            || GameManager.Instance.usingGlobalBulletDirection && GameManager.Instance.inputType == InputType.Gamepad && GameManager.Instance.aimAxis.magnitude > 0.1
+            || !GameManager.Instance.usingGlobalBulletDirection)
             _rigidbody.velocity = (GameManager.Instance.usingGlobalBulletDirection ? GameManager.Instance.aimAxis : _aimAxis) * GameManager.Instance.bulletSpeed;
-        else if(GameManager.Instance.usingGlobalBulletDirection)
+        else if (GameManager.Instance.usingGlobalBulletDirection)
             _rigidbody.velocity = Vector2.zero;
     }
 
