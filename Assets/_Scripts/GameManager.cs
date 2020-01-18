@@ -17,6 +17,10 @@ public class GameManager : MonoBehaviour
     public Queue<GameObject> bulletQueue = new Queue<GameObject>();
 
     public float bulletSpeed;
+
+    [Header("References")] 
+    
+    public CompositeCollider2D mapCollider;
     
     [Header("Starting Information")] 
     

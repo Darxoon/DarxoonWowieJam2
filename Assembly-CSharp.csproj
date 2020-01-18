@@ -60,6 +60,7 @@
      <Compile Include="Assets\_Scripts\InputType.cs" />
      <Compile Include="Assets\_Scripts\Player.cs" />
      <Compile Include="Assets\Bullet.cs" />
+     <Compile Include="Assets\Enemy.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>D:/Programming/UnityProjects/DarxoonWowie2/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
