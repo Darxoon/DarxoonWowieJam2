@@ -23,28 +23,17 @@ public class Bullet : MonoBehaviour
 
     private void OnEnable()
     {
-        
         _aimAxis = GameManager.Instance.aimAxis;
     }
 
     private void Update()
     {
         _rigidbody.velocity = _aimAxis * GameManager.Instance.bulletSpeed;
-//        if (_collider.IsTouchingLayers(LayerMask.GetMask("Enemy")))
-//        {
-//            ContactFilter2D filter = new ContactFilter2D {layerMask = LayerMask.GetMask("Enemy")};
-//            _collider.GetContacts(filter, _contacts);
-//
-//            foreach (Collider2D contact in _contacts)
-//            {
-//                Debug.Log("killled broo", contact);
-//            }
-//        }
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.gameObject.CompareTag("Map"))
+        if(other.gameObject.CompareTag("BulletBorders"))
             gameObject.SetActive(false);
         if (other.gameObject.CompareTag("Enemy"))
         {
