@@ -4,17 +4,19 @@ public class Player : MonoBehaviour
 {
     private Vector2 _velocity = Vector2.zero;
 
+    private float _shootCountdown = 0f;
+    
     private Rigidbody2D _rigidbody;
     private Camera _mainCam;
 
+    [SerializeField] private float initialShootCountdown;
+    
     [SerializeField] private float speed;
     [SerializeField] private float speedLimit;
     [SerializeField] private float slowdownCoefficient;
 
     [SerializeField] private Transform gun;
     [SerializeField] private Transform bulletSpawnPosition;
-    [SerializeField] private Transform bulletHeader;
-    [SerializeField] private GameObject bulletPrefab;
     
     private void Start()
     {
@@ -56,11 +58,14 @@ public class Player : MonoBehaviour
         
         Vector2 realAimAxis = new Vector2(Input.GetAxisRaw("Horizontal Shooting Gamepad"), Input.GetAxisRaw("Vertical Shooting Gamepad"));
 
+        _shootCountdown -= Time.deltaTime;
+        
         bool shooting = GameManager.Instance.inputType == InputType.KeyboardMouse
             ? Input.GetMouseButton(0)
             : realAimAxis.magnitude > 0.1f;
-        if (shooting)
+        if (shooting && _shootCountdown <= 0f)
         {
+            _shootCountdown = initialShootCountdown;
             GameObject instance = GameManager.Instance.bulletQueue.Dequeue();
             GameManager.Instance.bulletQueue.Enqueue(instance);
             instance.SetActive(false);
