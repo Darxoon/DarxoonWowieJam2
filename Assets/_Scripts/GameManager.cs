@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 
     public float bulletSpeed;
 
-    [Header("States")] 
+    [Header("State")] 
     
     public bool usingGlobalBulletDirection = false;
 
