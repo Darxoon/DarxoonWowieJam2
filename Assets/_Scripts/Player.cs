@@ -6,11 +6,16 @@ public class Player : MonoBehaviour
 
     private Rigidbody2D _rigidbody;
     private Camera _mainCam;
-    
+
     [SerializeField] private float speed;
     [SerializeField] private float speedLimit;
     [SerializeField] private float slowdownCoefficient;
 
+    [SerializeField] private Transform gun;
+    [SerializeField] private Transform bulletSpawnPosition;
+    [SerializeField] private Transform bulletHeader;
+    [SerializeField] private GameObject bulletPrefab;
+    
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -19,7 +24,6 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-//        Debug.Log($"{Input.GetAxisRaw("Horizontal Keyboard")} & {Input.GetAxisRaw("Horizontal Gamepad")} | {GameManager.Instance.inputType}");
         GameManager.Instance.movementAxis = new Vector2(
             GameManager.Instance.inputType == InputType.KeyboardMouse
                 ? Input.GetAxisRaw("Horizontal Keyboard")
@@ -31,7 +35,6 @@ public class Player : MonoBehaviour
         GameManager.Instance.movementAxis = GameManager.Instance.movementAxis.normalized;
         _velocity += GameManager.Instance.movementAxis * speed;
         _velocity = Vector2.ClampMagnitude(_velocity, speedLimit);
-//        Debug.Log($"{GameManager.Instance.movementAxis} {_velocity}");
         _velocity *= slowdownCoefficient;
         
         _rigidbody.velocity = _velocity / Time.deltaTime;
@@ -44,6 +47,28 @@ public class Player : MonoBehaviour
         }
         else
             GameManager.Instance.aimAxis = new Vector2(Input.GetAxisRaw("Horizontal Shooting Gamepad"), -Input.GetAxisRaw("Vertical Shooting Gamepad")).normalized; 
-        Debug.Log(GameManager.Instance.aimAxis);
+        
+        
+        Vector3 originalRotation = Quaternion.LookRotation(GameManager.Instance.aimAxis + new Vector2(0, 0.0001f), Vector3.up).eulerAngles;
+        
+        if (GameManager.Instance.aimAxis != new Vector2(0, 0))
+            gun.rotation = Quaternion.Euler(originalRotation.x, originalRotation.y > 0 ? originalRotation.y : -90, 0);
+        
+        Vector2 realAimAxis = new Vector2(Input.GetAxisRaw("Horizontal Shooting Gamepad"), Input.GetAxisRaw("Vertical Shooting Gamepad"));
+
+        bool shooting = GameManager.Instance.inputType == InputType.KeyboardMouse
+            ? Input.GetMouseButton(0)
+            : realAimAxis.magnitude > 0.1f;
+        if (shooting)
+        {
+            GameObject instance = GameManager.Instance.bulletQueue.Dequeue();
+            GameManager.Instance.bulletQueue.Enqueue(instance);
+            instance.SetActive(false);
+            instance.SetActive(true);
+            instance.transform.position = bulletSpawnPosition.position;
+            Vector3 originalInstanceRotation = Quaternion.LookRotation(GameManager.Instance.aimAxis, Vector3.up).eulerAngles;
+            instance.transform.rotation = Quaternion.Euler(originalRotation.x, originalInstanceRotation.y > 0 ? originalInstanceRotation.y : -90, 0);//Quaternion.Euler(0, -90, 0);
+//            Instantiate(bulletPrefab, bulletSpawnPosition.position, Quaternion.Euler(0, -90, 0), bulletHeader);
+        }
     }
 }
