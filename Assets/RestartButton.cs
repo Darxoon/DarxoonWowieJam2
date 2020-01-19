@@ -8,7 +8,7 @@ public class RestartButton : MonoBehaviour
 {
     private static void Restart()
     {
-        SceneManager.LoadScene("Scenes/Main");
+        SceneManager.LoadScene(GameManager.Instance.currentLevelScene);
         LevelManager.Instance.GenerateBullets(true);
         Debug.Log("Restarted | " + LevelManager.Instance.bulletQueue.Count);
     }

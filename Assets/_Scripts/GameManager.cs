@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     public float bulletSpeed;
 
+    public string currentLevelScene = "Scenes/Main";
+    
     [Header("State")] 
     
     public bool usingGlobalBulletDirection = false;
