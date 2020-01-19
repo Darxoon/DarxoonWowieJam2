@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -25,6 +23,7 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         GenerateBullets(false);
+        GameManager.Instance.currentLevelScene = SceneManager.GetActiveScene().name;
     }
 
     public void GenerateBullets(bool destroyPrevious)

@@ -63,6 +63,7 @@
      <Compile Include="Assets\_Scripts\Player.cs" />
      <Compile Include="Assets\_Scripts\SimpleEnemy.cs" />
      <Compile Include="Assets\AutoAudioSource.cs" />
+     <Compile Include="Assets\BulletOrigin.cs" />
      <Compile Include="Assets\CameraController.cs" />
      <Compile Include="Assets\LifeMeter.cs" />
      <Compile Include="Assets\OneTimeParticleSystem.cs" />
