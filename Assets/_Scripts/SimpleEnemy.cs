@@ -10,14 +10,18 @@ public class SimpleEnemy : MonoBehaviour
     public float maxHealth = 5;
     public bool canDie = true;
 
-    public bool onKillGoToLevel = false;
+    public bool onKillGoToLevel;
     [SerializeField] private string killDestination;
+
+    [SerializeField] private bool usesPlayerAimAxis = false;
     
     [Header("Calculations")]
     
     [SerializeField] private float turnSpeed;
     [SerializeField] private float speed;
     [SerializeField] private float direction;
+    [SerializeField] private float minShootDistance;
+    [SerializeField] private float initialShootCountdown;
 
     [Header("Components")] 
     
@@ -25,8 +29,14 @@ public class SimpleEnemy : MonoBehaviour
     [SerializeField] private new ParticleSystem particleSystem;
     [SerializeField] private SpriteRenderer eyeSpriteRenderer;
 
+    [Header("Gun")] 
+    
+    [SerializeField] private Transform gunTransform;
+    [SerializeField] private Transform bulletSpawnPointTransform;
+
     private bool _livingAgain = true;
-    private float _hitCountdown = 0f;
+    private float _hitCountdown;
+    private float _shootCountdown = 0f;
     
     private void Start()
     {
@@ -42,6 +52,8 @@ public class SimpleEnemy : MonoBehaviour
 
         Transform transform1;
         (transform1 = transform).rotation = Quaternion.Euler(0, 0, direction);
+        if(gunTransform)
+            gunTransform.rotation = Quaternion.Euler(0, 0, rawDirection);
 //        transform1.position += Time.deltaTime * -speed * transform1.right.normalized;
         rigidbody.velocity = -speed * transform1.right.normalized;
 
@@ -52,6 +64,29 @@ public class SimpleEnemy : MonoBehaviour
             eyeSpriteRenderer.enabled = true;
             _livingAgain = true;
             Debug.Log("Living again!");
+        }
+
+        if (gunTransform)
+        {
+            // Shooting
+            _shootCountdown -= Time.deltaTime;
+            if (_shootCountdown <= 0.1f)
+            {
+                Debug.Log("shooot");
+                _shootCountdown = initialShootCountdown;
+//                CameraController.Instance.Shake(GameManager.Instance.shootScreenShake);
+                
+                GameObject instance = LevelManager.Instance.bulletQueue.Dequeue();
+                LevelManager.Instance.bulletQueue.Enqueue(instance);
+                
+                instance.SetActive(false);
+                instance.SetActive(true);
+                instance.transform.position = bulletSpawnPointTransform.position;
+
+                Vector3 originalInstanceRotation = Quaternion.LookRotation(usesPlayerAimAxis ? GameManager.Instance.aimAxis : unitVelocity, Vector3.up).eulerAngles;
+                instance.transform.rotation = Quaternion.Euler(gunTransform.rotation.eulerAngles.z, originalInstanceRotation.y > 0 ? originalInstanceRotation.y : -90, 0);//Quaternion.Euler(0, -90, 0);
+
+            }
         }
     }
 
