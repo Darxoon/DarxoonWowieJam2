@@ -27905,6 +27905,12 @@ MonoBehaviour:
   hitScreenShake: 50
   killScreenShake: 64
   playerHitScreenShake: 84
+  inspectorSounds:
+  - Name: Kill
+    Sounds:
+    - {fileID: 8300000, guid: a847511c899a38740986cb814e954e08, type: 3}
+    - {fileID: 8300000, guid: 0a5e407b9e6357844bf57555e621413e, type: 3}
+    - {fileID: 8300000, guid: 335447af0cfaccd408482961dee05f70, type: 3}
 --- !u!4 &1508689093
 Transform:
   m_ObjectHideFlags: 0

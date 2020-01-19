@@ -27,8 +27,11 @@ public class GameManager : MonoBehaviour
     public float hitScreenShake = 0.3f;
     public float killScreenShake = 1f;
     public float playerHitScreenShake = 0.6f;
+
+    [Header("Sounds")] 
     
-    
+    [SerializeField] private SoundItem[] inspectorSounds;
+    [HideInInspector] public Dictionary<string, AudioClip[]> sounds = new Dictionary<string, AudioClip[]>();
 
     private void Awake()
     {
@@ -40,5 +43,26 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         DontDestroyOnLoad(this);
+        foreach (SoundItem soundItem in inspectorSounds)
+        {
+//            Debug.Log(soundItem);
+//            Debug.Log(soundItem.Name);
+//            Debug.Log(soundItem.Sounds);
+            sounds.Add(soundItem.Name, soundItem.Sounds);
+            Debug.Log(soundItem.Sounds.Length);
+            Debug.Log(sounds[soundItem.Name].Length);
+            Debug.Log(soundItem.Name);
+        }
+    }
+
+    public AudioClip GetClip(string clipName)
+    {
+        Debug.LogWarning("wtf");
+        Debug.Log(clipName);
+        Debug.Log(sounds);
+        int element = Random.Range(0, sounds[clipName].Length);
+        Debug.Log(element);
+        Debug.Log(sounds.Count);
+        return sounds[clipName][element];
     }
 }
