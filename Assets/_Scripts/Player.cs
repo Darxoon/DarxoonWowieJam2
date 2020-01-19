@@ -123,7 +123,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            Debug.Log("countdown");
+//            Debug.Log("countdown");
         }
     }
 }

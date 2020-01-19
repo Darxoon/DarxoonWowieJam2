@@ -64,6 +64,7 @@
      <Compile Include="Assets\_Scripts\SimpleEnemy.cs" />
      <Compile Include="Assets\CameraController.cs" />
      <Compile Include="Assets\LifeMeter.cs" />
+     <Compile Include="Assets\OneTimeParticleSystem.cs" />
      <Compile Include="Assets\RestartButton.cs" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
