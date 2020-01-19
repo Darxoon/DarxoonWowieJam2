@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SimpleEnemy : MonoBehaviour
 {
@@ -8,6 +9,9 @@ public class SimpleEnemy : MonoBehaviour
 
     public float maxHealth = 5;
     public bool canDie = true;
+
+    public bool onKillGoToLevel = false;
+    [SerializeField] private string killDestination;
     
     [Header("Calculations")]
     
@@ -59,6 +63,8 @@ public class SimpleEnemy : MonoBehaviour
         _hitCountdown = .3f;
         if (health <= 0.2f)
         {
+            if (onKillGoToLevel)
+                SceneManager.LoadScene(killDestination);
             gameObject.tag = "InactiveEnemy";
             if(eyeSpriteRenderer)
                 eyeSpriteRenderer.enabled = false;
