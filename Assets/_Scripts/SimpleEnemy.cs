@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class SimpleEnemy : MonoBehaviour
 {
 
     public float health = 5;
@@ -38,7 +38,10 @@ public class Enemy : MonoBehaviour
     {
         health -= strength;
         if (health <= 0.2f)
+        {
+            CameraController.Instance.Shake(GameManager.Instance.killScreenShake);
             Destroy(gameObject);
+        }
     }
 
 }

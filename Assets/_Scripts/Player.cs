@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -106,7 +106,7 @@ public class Player : MonoBehaviour
     private void OnCollisionStay2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Enemy"))
-            Hit(other.gameObject.GetComponent<Enemy>().strength);
+            Hit(other.gameObject.GetComponent<SimpleEnemy>().strength);
     }
 
     private void Hit(float enemyStrength)

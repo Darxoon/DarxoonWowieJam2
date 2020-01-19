@@ -16010,6 +16010,56 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d227f977dde45b04284992993a4b8194, type: 3}
+--- !u!1 &677903280
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 677903282}
+  - component: {fileID: 677903281}
+  m_Layer: 0
+  m_Name: Camera Holder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &677903281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677903280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3faa411f518130d4785781bb2c57e027, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCam: {fileID: 1855537272}
+  offset: {x: 0, y: 0, z: -10}
+  drag: 1
+  shake: 0
+  shakeAmount: 0.27
+  shakeDecreaseFactor: 4.14
+--- !u!4 &677903282
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677903280}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1855537273}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &695316973 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3391867313919001260, guid: d227f977dde45b04284992993a4b8194,
@@ -27725,6 +27775,10 @@ MonoBehaviour:
   bulletAmount: 500
   bulletPrefab: {fileID: 8402690791375495159, guid: e75317ddb3702894989211e67f1d7c0a,
     type: 3}
+  shootScreenShake: 33
+  hitScreenShake: 50
+  killScreenShake: 64
+  playerHitScreenShake: 84
 --- !u!4 &1508689093
 Transform:
   m_ObjectHideFlags: 0
@@ -30162,7 +30216,6 @@ GameObject:
   - component: {fileID: 1855537273}
   - component: {fileID: 1855537272}
   - component: {fileID: 1855537271}
-  - component: {fileID: 1855537274}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -30228,28 +30281,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1855537270}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 677903282}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1855537274
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1855537270}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3faa411f518130d4785781bb2c57e027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  offset: {x: 0, y: 0, z: -10}
-  drag: 1
-  moveTooMuch: 1
 --- !u!1 &1874399919
 GameObject:
   m_ObjectHideFlags: 0
