@@ -88,10 +88,10 @@ public class Player : MonoBehaviour
         _shootCountdown -= Time.deltaTime;
         _hitCountdown -= Time.deltaTime;
         
-        bool shooting = GameManager.Instance.inputType == InputType.KeyboardMouse
+        bool shootingInput = GameManager.Instance.inputType == InputType.KeyboardMouse
             ? Input.GetMouseButton(0)
             : realAimAxis.magnitude > 0.1f;
-        if (shooting && _shootCountdown <= 0f)
+        if (shootingInput && _shootCountdown <= 0f)
         {
             CameraController.Instance.Shake(GameManager.Instance.shootScreenShake);
             _shootCountdown = initialShootCountdown;
