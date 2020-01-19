@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
     public float hitScreenShake = 0.3f;
     public float killScreenShake = 1f;
     public float playerHitScreenShake = 0.6f;
+    
+    
 
     private void Awake()
     {

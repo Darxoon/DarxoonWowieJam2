@@ -15,6 +15,8 @@ public class Bullet : MonoBehaviour
     private Collider2D[] _contacts = new Collider2D[20];
 
     private float _strength = 0;
+
+    [SerializeField] private GameObject killParticles;
     
     private void Start()
     {
@@ -26,6 +28,7 @@ public class Bullet : MonoBehaviour
     private void OnEnable()
     {
         _strength = Player.Instance.strength;
+        killParticles = Player.Instance.killParticles;
         _aimAxis = GameManager.Instance.aimAxis;
     }
 
@@ -46,8 +49,13 @@ public class Bullet : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy"))
         {
             CameraController.Instance.Shake(GameManager.Instance.hitScreenShake);
-            other.gameObject.GetComponent<SimpleEnemy>().Hit(_strength);
-                
+            if (other.gameObject.GetComponent<SimpleEnemy>().Hit(_strength))
+            {
+                Debug.Log("hi");
+                Transform transform1 = transform;
+                Instantiate(Player.Instance.killParticles, transform1.position + new Vector3(0, 0, -5), transform1.rotation);
+            }
+
             gameObject.SetActive(false);
         }
     }

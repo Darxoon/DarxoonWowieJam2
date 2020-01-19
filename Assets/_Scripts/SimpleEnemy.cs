@@ -51,10 +51,10 @@ public class SimpleEnemy : MonoBehaviour
         }
     }
 
-    public void Hit(float playerStrength)
+    public bool Hit(float playerStrength)
     {
         if(_hitCountdown >= 0.1f)
-            return;
+            return false;
         health -= playerStrength;
         _hitCountdown = .3f;
         if (health <= 0.2f)
@@ -69,11 +69,12 @@ public class SimpleEnemy : MonoBehaviour
             if (canDie)
                 Destroy(gameObject);
             else
-            {
-                
                 health = maxHealth;
-            }
-        }
+
+            return true;
+        } 
+        else
+            return false;
     }
 
 }

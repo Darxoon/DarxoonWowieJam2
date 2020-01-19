@@ -28,6 +28,8 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform gun;
     [SerializeField] private Transform bulletSpawnPosition;
 
+    public GameObject killParticles;
+    
     private void Awake() 
     {
         Instance = this;
