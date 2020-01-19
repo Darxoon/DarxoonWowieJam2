@@ -3,32 +3,20 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-
-    private Collider2D _mapCollider;
-
-    private Collider2D _collider;
-
     private Vector2 _aimAxis;
     
     private Rigidbody2D _rigidbody;
 
-    private Collider2D[] _contacts = new Collider2D[20];
-
-    private float _strength = 0;
-
-    [SerializeField] private GameObject killParticles;
+    private float _strength;
     
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-        _collider = transform.GetChild(0).gameObject.GetComponent<BoxCollider2D>();
-        _mapCollider = LevelManager.Instance.mapCollider;
     }
 
     private void OnEnable()
     {
         _strength = Player.Instance.strength;
-        killParticles = Player.Instance.killParticles;
         _aimAxis = GameManager.Instance.aimAxis;
     }
 
