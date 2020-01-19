@@ -18,10 +18,11 @@ public class SimpleEnemy : MonoBehaviour
     [Header("Components")] 
     
     [SerializeField] private new Rigidbody2D rigidbody;
-    [SerializeField] private ParticleSystem particleSystem;
+    [SerializeField] private new ParticleSystem particleSystem;
+    [SerializeField] private SpriteRenderer eyeSpriteRenderer;
 
-    
-    private float _dieCountdown = 0f;
+    private bool _livingAgain = true;
+    private float _hitCountdown = 0f;
     
     private void Start()
     {
@@ -40,18 +41,31 @@ public class SimpleEnemy : MonoBehaviour
 //        transform1.position += Time.deltaTime * -speed * transform1.right.normalized;
         rigidbody.velocity = -speed * transform1.right.normalized;
 
-        _dieCountdown -= Time.deltaTime;
+        _hitCountdown -= Time.deltaTime;
+        if (_hitCountdown <= 0.1 && !_livingAgain)
+        {
+            gameObject.tag = "Enemy";
+            eyeSpriteRenderer.enabled = true;
+            _livingAgain = true;
+            Debug.Log("Living again!");
+        }
     }
 
     public void Hit(float playerStrength)
     {
-        if(_dieCountdown >= 0.1f)
+        if(_hitCountdown >= 0.1f)
             return;
         health -= playerStrength;
+        _hitCountdown = .3f;
         if (health <= 0.2f)
         {
-            _dieCountdown = 6f;
+            gameObject.tag = "InactiveEnemy";
+            if(eyeSpriteRenderer)
+                eyeSpriteRenderer.enabled = false;
+            _livingAgain = false;
             CameraController.Instance.Shake(GameManager.Instance.killScreenShake);
+            if(particleSystem)
+                particleSystem.Play();
             if (canDie)
                 Destroy(gameObject);
             else

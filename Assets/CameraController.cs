@@ -27,7 +27,8 @@ public class CameraController : MonoBehaviour
     {
         if (shake > 0)
         {
-            Vector2 rawNewLocation = shake * shakeAmount * shake * Random.insideUnitCircle;
+//            Debug.Log($"{shake} | {Mathf.Sqrt(shake)} | {Mathf.Sqrt(Mathf.Sqrt(shake))}");
+            Vector2 rawNewLocation = shake * shakeAmount * Mathf.Sqrt(Mathf.Sqrt(Mathf.Sqrt(shake))) * Random.insideUnitCircle;
             Vector3 localPosition = mainCam.transform.localPosition;
             localPosition =  Vector3.Lerp(localPosition, new Vector3(rawNewLocation.x, rawNewLocation.y, localPosition.z), .7f);
             mainCam.transform.localPosition = localPosition;
