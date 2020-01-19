@@ -228,7 +228,7 @@ MonoBehaviour:
   strength: 1
   turnSpeed: 0.85
   speed: 3.17
-  direction: 1995.7118
+  direction: 0
   rigidbody: {fileID: 0}
 --- !u!50 &3391867313919001249
 Rigidbody2D:

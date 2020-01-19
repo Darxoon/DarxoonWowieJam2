@@ -5,6 +5,9 @@ public class SimpleEnemy : MonoBehaviour
 
     public float health = 5;
     public float strength = 1;
+
+    public float maxHealth = 5;
+    public bool canDie = true;
     
     [Header("Calculations")]
     
@@ -15,7 +18,11 @@ public class SimpleEnemy : MonoBehaviour
     [Header("Components")] 
     
     [SerializeField] private new Rigidbody2D rigidbody;
+    [SerializeField] private ParticleSystem particleSystem;
 
+    
+    private float _dieCountdown = 0f;
+    
     private void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
@@ -32,15 +39,26 @@ public class SimpleEnemy : MonoBehaviour
         (transform1 = transform).rotation = Quaternion.Euler(0, 0, direction);
 //        transform1.position += Time.deltaTime * -speed * transform1.right.normalized;
         rigidbody.velocity = -speed * transform1.right.normalized;
+
+        _dieCountdown -= Time.deltaTime;
     }
 
-    public void Hit(float strength)
+    public void Hit(float playerStrength)
     {
-        health -= strength;
+        if(_dieCountdown >= 0.1f)
+            return;
+        health -= playerStrength;
         if (health <= 0.2f)
         {
+            _dieCountdown = 6f;
             CameraController.Instance.Shake(GameManager.Instance.killScreenShake);
-            Destroy(gameObject);
+            if (canDie)
+                Destroy(gameObject);
+            else
+            {
+                
+                health = maxHealth;
+            }
         }
     }
 
