@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -62,7 +62,7 @@ public class Player : MonoBehaviour
                 : -Input.GetAxisRaw("Vertical Gamepad")
         );
         GameManager.Instance.movementAxis = GameManager.Instance.movementAxis.normalized;
-        Debug.Log(_hitCountdown);
+//        Debug.Log(_hitCountdown);
         
         // Determine aimAxis
         if (GameManager.Instance.inputType == InputType.KeyboardMouse)
@@ -91,6 +91,7 @@ public class Player : MonoBehaviour
             : realAimAxis.magnitude > 0.1f;
         if (shooting && _shootCountdown <= 0f)
         {
+            CameraController.Instance.Shake(GameManager.Instance.shootScreenShake);
             _shootCountdown = initialShootCountdown;
             GameObject instance = LevelManager.Instance.bulletQueue.Dequeue();
             LevelManager.Instance.bulletQueue.Enqueue(instance);
@@ -112,6 +113,7 @@ public class Player : MonoBehaviour
     {
         if (_hitCountdown <= 0.1)
         {
+            CameraController.Instance.Shake(GameManager.Instance.playerHitScreenShake);
             _hitCountdown = initialHitCountdown;
             health -= enemyStrength;
             if (health <= 0.1)

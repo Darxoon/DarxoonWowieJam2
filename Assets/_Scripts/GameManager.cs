@@ -20,6 +20,13 @@ public class GameManager : MonoBehaviour
     
     public int bulletAmount;
     public GameObject bulletPrefab;
+    
+    [Header("Screenshake")]
+    
+    public float shootScreenShake = 0.1f;
+    public float hitScreenShake = 0.3f;
+    public float killScreenShake = 1f;
+    public float playerHitScreenShake = 0.6f;
 
     private void Awake()
     {

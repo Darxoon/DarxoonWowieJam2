@@ -45,7 +45,8 @@ public class Bullet : MonoBehaviour
             gameObject.SetActive(false);
         if (other.gameObject.CompareTag("Enemy"))
         {
-            other.gameObject.GetComponent<Enemy>().Hit(_strength);
+            CameraController.Instance.Shake(GameManager.Instance.hitScreenShake);
+            other.gameObject.GetComponent<SimpleEnemy>().Hit(_strength);
                 
             gameObject.SetActive(false);
         }
