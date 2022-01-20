@@ -13,7 +13,12 @@ public class SimpleEnemy : MonoBehaviour
     public bool onKillGoToLevel;
     [SerializeField] private string killDestination;
 
-    [SerializeField] private bool usesPlayerAimAxis = false;
+    [SerializeField] private bool usesPlayerAimAxis;
+
+    [SerializeField] private bool requiredForGoalRequirement = false;
+
+    [SerializeField] private bool doRespawn = false;
+    [SerializeField] private float respawnTime;
     
     [Header("Calculations")]
     
@@ -22,7 +27,9 @@ public class SimpleEnemy : MonoBehaviour
     [SerializeField] private float direction;
     [SerializeField] private float minShootDistance;
     [SerializeField] private float initialShootCountdown;
-
+    [SerializeField] private float maxGunImprecision = 1f;
+    [SerializeField] private float imprecisionMultiplier = 1f;
+    
     [Header("Components")] 
     
     [SerializeField] private new Rigidbody2D rigidbody;
@@ -34,9 +41,16 @@ public class SimpleEnemy : MonoBehaviour
     [SerializeField] private Transform gunTransform;
     [SerializeField] private Transform bulletSpawnPointTransform;
 
+    public Vector2 gunAxis;
+    
     private bool _livingAgain = true;
     private float _hitCountdown;
     private float _shootCountdown = 0f;
+
+    private float _gunImprecision;
+    private float _gunImprecisionCounter = 0;
+
+//    private float _respawnCounter = 0f;
     
     private void Start()
     {
@@ -52,8 +66,15 @@ public class SimpleEnemy : MonoBehaviour
 
         Transform transform1;
         (transform1 = transform).rotation = Quaternion.Euler(0, 0, direction);
-        if(gunTransform)
-            gunTransform.rotation = Quaternion.Euler(0, 0, rawDirection);
+        if (gunTransform)
+        {
+            // imprecision
+            _gunImprecisionCounter += Time.deltaTime;
+            _gunImprecision = Mathf.Clamp(Mathf.PerlinNoise(_gunImprecisionCounter * imprecisionMultiplier, 0), 0f, 1f) - 0.5f;
+            
+            gunTransform.rotation = Quaternion.Euler(0, 0, rawDirection + _gunImprecision * 2 * maxGunImprecision);
+        }
+
 //        transform1.position += Time.deltaTime * -speed * transform1.right.normalized;
         rigidbody.velocity = -speed * transform1.right.normalized;
 
@@ -72,22 +93,29 @@ public class SimpleEnemy : MonoBehaviour
             _shootCountdown -= Time.deltaTime;
             if (_shootCountdown <= 0.1f)
             {
-                Debug.Log("shooot");
+//                Debug.Log("shooot");
+                gunAxis = unitVelocity;
+                
                 _shootCountdown = initialShootCountdown;
 //                CameraController.Instance.Shake(GameManager.Instance.shootScreenShake);
                 
                 GameObject instance = LevelManager.Instance.bulletQueue.Dequeue();
                 LevelManager.Instance.bulletQueue.Enqueue(instance);
                 
-                instance.SetActive(false);
-                instance.SetActive(true);
-                instance.transform.position = bulletSpawnPointTransform.position;
+                Bullet bullet = instance.GetComponent<Bullet>();
+                bullet.SetActive(true);
 
+                bullet.origin = BulletOrigin.Enemy;
+                bullet.enemyOrigin = this;
+
+                instance.transform.position = bulletSpawnPointTransform.position;
+                
                 Vector3 originalInstanceRotation = Quaternion.LookRotation(usesPlayerAimAxis ? GameManager.Instance.aimAxis : unitVelocity, Vector3.up).eulerAngles;
                 instance.transform.rotation = Quaternion.Euler(gunTransform.rotation.eulerAngles.z, originalInstanceRotation.y > 0 ? originalInstanceRotation.y : -90, 0);//Quaternion.Euler(0, -90, 0);
 
             }
         }
+        
     }
 
     public bool Hit(float playerStrength)
@@ -98,6 +126,10 @@ public class SimpleEnemy : MonoBehaviour
         _hitCountdown = .3f;
         if (health <= 0.2f)
         {
+            Debug.Log(requiredForGoalRequirement);
+            // you're dead at this point
+            if(requiredForGoalRequirement)
+                LevelManager.Instance.RecalculateGoalRequirement(-1);
             if (onKillGoToLevel)
                 SceneManager.LoadScene(killDestination);
             gameObject.tag = "InactiveEnemy";
@@ -108,7 +140,15 @@ public class SimpleEnemy : MonoBehaviour
             if(particleSystem)
                 particleSystem.Play();
             if (canDie)
-                Destroy(gameObject);
+            {
+                if(!doRespawn)
+                    Destroy(gameObject);
+                else
+                {
+                    Invoke(nameof(Respawn), respawnTime);
+                    gameObject.SetActive(false);
+                }
+            }
             else
                 health = maxHealth;
 
@@ -116,6 +156,13 @@ public class SimpleEnemy : MonoBehaviour
         } 
         else
             return false;
+    }
+
+    private void Respawn()
+    {
+        if (requiredForGoalRequirement)
+            LevelManager.Instance.RecalculateGoalRequirement(1);
+        gameObject.SetActive(true);
     }
 
 }

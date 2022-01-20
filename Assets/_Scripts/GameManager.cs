@@ -38,8 +38,9 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         if (Instance)
-            Destroy(Instance.gameObject);
-        Instance = this;
+            Destroy(gameObject);
+        else
+            Instance = this;
     }
 
     private void Start()
@@ -59,12 +60,12 @@ public class GameManager : MonoBehaviour
 
     public AudioClip GetClip(string clipName)
     {
-        Debug.LogWarning("wtf");
-        Debug.Log(clipName);
-        Debug.Log(sounds);
+//        Debug.LogWarning("wtf");
+//        Debug.Log(clipName);
+//        Debug.Log(sounds);
         int element = Random.Range(0, sounds[clipName].Length);
-        Debug.Log(element);
-        Debug.Log(sounds.Count);
+//        Debug.Log(element);
+//        Debug.Log(sounds.Count);
         return sounds[clipName][element];
     }
 }

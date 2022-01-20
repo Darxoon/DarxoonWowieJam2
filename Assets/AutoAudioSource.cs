@@ -10,7 +10,7 @@ public class AutoAudioSource : MonoBehaviour
 
     private void Start()
     {
-        Debug.LogWarning(clipName);
+//        Debug.LogWarning(clipName);
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = GameManager.Instance.GetClip(clipName);
         audioSource.Play();

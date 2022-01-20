@@ -8,6 +8,9 @@ public class Bullet : MonoBehaviour
     private Rigidbody2D _rigidbody;
 
     private float _strength;
+
+    public BulletOrigin origin = BulletOrigin.Player;
+    public SimpleEnemy enemyOrigin;
     
     private void Start()
     {
@@ -16,8 +19,17 @@ public class Bullet : MonoBehaviour
 
     private void OnEnable()
     {
-        _strength = Player.Instance.strength;
-        _aimAxis = GameManager.Instance.aimAxis;
+        _strength = 0;
+        _aimAxis = Vector2.zero;
+        Invoke(nameof(SetAimAxis), 0.0f);
+    }
+
+    private void SetAimAxis()
+    {
+        _strength = origin == BulletOrigin.Player ? Player.Instance.strength : enemyOrigin.strength;
+        _aimAxis = origin == BulletOrigin.Player
+            ? GameManager.Instance.aimAxis
+            : enemyOrigin.gunAxis;
     }
 
     private void Update()
@@ -33,17 +45,40 @@ public class Bullet : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.gameObject.CompareTag("BulletBorders"))
-            gameObject.SetActive(false);
-        if (other.gameObject.CompareTag("Enemy"))
+            SetActive(false);
+        if (other.gameObject.CompareTag("Enemy") && origin == BulletOrigin.Player)
         {
             CameraController.Instance.Shake(GameManager.Instance.hitScreenShake);
             if (other.gameObject.GetComponent<SimpleEnemy>().Hit(_strength))
             {
-                Debug.Log("hi");
+//                Debug.Log("hi");
                 Transform transform1 = transform;
                 Instantiate(Player.Instance.killParticles, transform1.position + new Vector3(0, 0, -5), transform1.rotation);
             }
 
+            SetActive(false);
+        }
+
+        if (other.gameObject.CompareTag("Player") && origin == BulletOrigin.Enemy)
+        {
+            Debug.Log($"Player hit with {_strength}", this);
+            CameraController.Instance.Shake(GameManager.Instance.playerHitScreenShake);
+            Player.Instance.Hit(_strength);
+
+            SetActive(false);
+        }
+    }
+
+    public void SetActive(bool active)
+    {
+        if (active)
+        {
+            SetActive(false);
+            gameObject.SetActive(true);
+        }
+        else
+        {
+            origin = BulletOrigin.Player;
             gameObject.SetActive(false);
         }
     }

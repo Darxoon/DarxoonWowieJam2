@@ -97,8 +97,7 @@ public class Player : MonoBehaviour
             _shootCountdown = initialShootCountdown;
             GameObject instance = LevelManager.Instance.bulletQueue.Dequeue();
             LevelManager.Instance.bulletQueue.Enqueue(instance);
-            instance.SetActive(false);
-            instance.SetActive(true);
+            instance.GetComponent<Bullet>().SetActive(true);
             instance.transform.position = bulletSpawnPosition.position;
             Vector3 originalInstanceRotation = Quaternion.LookRotation(GameManager.Instance.aimAxis, Vector3.up).eulerAngles;
             instance.transform.rotation = Quaternion.Euler(originalRotation.x, originalInstanceRotation.y > 0 ? originalInstanceRotation.y : -90, 0);//Quaternion.Euler(0, -90, 0);
@@ -111,7 +110,7 @@ public class Player : MonoBehaviour
             Hit(other.gameObject.GetComponent<SimpleEnemy>().strength);
     }
 
-    private void Hit(float enemyStrength)
+    public void Hit(float enemyStrength)
     {
         if (_hitCountdown <= 0.1)
         {
